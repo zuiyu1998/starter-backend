@@ -3,7 +3,7 @@ mod cmd;
 use crate::{project::StarterProjectMeta, Result};
 use std::process::Command;
 
-use cmd::Cmd;
+pub use cmd::{Cmd, CmdPath};
 
 pub enum ExecuterKind {
     Cmd(Cmd),
@@ -20,6 +20,12 @@ impl ProjectExecuter for ExecuterKind {
 pub enum Executer {
     Kind(ExecuterKind),
     Custom,
+}
+
+impl From<CmdPath> for Executer {
+    fn from(value: CmdPath) -> Self {
+        Executer::Kind(ExecuterKind::Cmd(Cmd::Path(value)))
+    }
 }
 
 impl ProjectExecuter for Executer {

@@ -1,11 +1,26 @@
 use chrono::NaiveDateTime;
 use uuid::Uuid;
 
-use crate::{executer::Executer, utils::get_now};
+use crate::{executer::Executer, prelude::ProjectExecuter, utils::get_now, Result};
+
+pub struct StarterProjectListResponse {
+    pub count: i32,
+    pub data: Vec<StarterProject>,
+    pub page_size: i32,
+    pub page: i32,
+}
 
 pub struct StarterProject {
     pub meta: StarterProjectMeta,
     pub excuter: Executer,
+}
+
+impl StarterProject {
+    pub fn executer(self) -> Result<()> {
+        self.excuter.execute(self.meta)?;
+
+        Ok(())
+    }
 }
 
 impl StarterProject {
