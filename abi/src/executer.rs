@@ -1,22 +1,14 @@
-# 功能
+use crate::{project::StarterProject, Result};
+use std::process::Command;
 
-- 项目执行器
-- 2024-6-24
-- zuiyu1998
+pub struct Executer(Box<dyn ProjectExecuter>);
 
-## 概述
+impl ProjectExecuter for Executer {
+    fn build(&self, project: StarterProject) -> Command {
+        self.0.build(project)
+    }
+}
 
-用于将项目的关键信息用于启动应用程序，应该支持多平台。
-
-## 指南级别的解释
-
-把将项目的关键信息用于启动应用程序这一个功能抽象为 trait。通过在实现 trait 的不同对象实现跨平台。
-
-## 参考级别解释
-
-定义一个 trait ProjectExecuter，它的定义如下:
-
-```rust
 pub trait ProjectExecuter: 'static + Send + Sync {
     fn build(&self, project: StarterProject) -> Command;
 
@@ -36,5 +28,3 @@ pub trait ProjectExecuter: 'static + Send + Sync {
         Ok(())
     }
 }
-
-```
