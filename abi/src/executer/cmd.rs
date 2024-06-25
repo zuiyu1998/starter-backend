@@ -1,6 +1,6 @@
 use super::ProjectExecuter;
 
-use crate::project::StarterProject;
+use crate::project::StarterProjectMeta;
 use std::process::Command;
 
 pub enum Cmd {
@@ -8,7 +8,7 @@ pub enum Cmd {
 }
 
 impl ProjectExecuter for Cmd {
-    fn build(&self, project: StarterProject) -> Command {
+    fn build(&self, project: StarterProjectMeta) -> Command {
         match self {
             Cmd::Path(path) => path.build(project),
         }
@@ -18,7 +18,7 @@ impl ProjectExecuter for Cmd {
 pub struct CmdPath;
 
 impl ProjectExecuter for CmdPath {
-    fn build(&self, project: StarterProject) -> Command {
+    fn build(&self, project: StarterProjectMeta) -> Command {
         let args = format!("{} {}", project.exe_path, project.path);
         let mut command = Command::new("cmd");
 
@@ -34,9 +34,9 @@ mod test {
     fn test_cmd_path() {
         use super::CmdPath;
         use crate::executer::ProjectExecuter;
-        use crate::project::StarterProject;
+        use crate::project::StarterProjectMeta;
 
-        let project = StarterProject::new("code", ".", "");
+        let project = StarterProjectMeta::new("code", ".", "");
 
         let executer = CmdPath;
 

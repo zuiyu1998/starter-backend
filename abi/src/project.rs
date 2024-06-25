@@ -1,10 +1,21 @@
 use chrono::NaiveDateTime;
 use uuid::Uuid;
 
-use crate::utils::get_now;
+use crate::{executer::Executer, utils::get_now};
+
+pub struct StarterProject {
+    pub meta: StarterProjectMeta,
+    pub excuter: Executer,
+}
+
+impl StarterProject {
+    pub fn new(meta: StarterProjectMeta, excuter: Executer) -> Self {
+        Self { meta, excuter }
+    }
+}
 
 //启动器项目
-pub struct StarterProject {
+pub struct StarterProjectMeta {
     //
     pub uuid: Uuid,
 
@@ -15,7 +26,7 @@ pub struct StarterProject {
     pub icon: String,
 }
 
-impl StarterProject {
+impl StarterProjectMeta {
     pub fn new(exe_path: &str, path: &str, icon: &str) -> Self {
         let now: NaiveDateTime = get_now();
 

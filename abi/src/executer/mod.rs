@@ -1,6 +1,6 @@
 mod cmd;
 
-use crate::{project::StarterProject, Result};
+use crate::{project::StarterProjectMeta, Result};
 use std::process::Command;
 
 use cmd::Cmd;
@@ -10,7 +10,7 @@ pub enum ExecuterKind {
 }
 
 impl ProjectExecuter for ExecuterKind {
-    fn build(&self, project: StarterProject) -> Command {
+    fn build(&self, project: StarterProjectMeta) -> Command {
         match self {
             ExecuterKind::Cmd(cmd) => cmd.build(project),
         }
@@ -23,7 +23,7 @@ pub enum Executer {
 }
 
 impl ProjectExecuter for Executer {
-    fn build(&self, project: StarterProject) -> Command {
+    fn build(&self, project: StarterProjectMeta) -> Command {
         match self {
             Executer::Kind(kind) => kind.build(project),
             Executer::Custom => {
@@ -34,9 +34,9 @@ impl ProjectExecuter for Executer {
 }
 
 pub trait ProjectExecuter: 'static + Send + Sync {
-    fn build(&self, project: StarterProject) -> Command;
+    fn build(&self, project: StarterProjectMeta) -> Command;
 
-    fn execute(&self, project: StarterProject) -> Result<()> {
+    fn execute(&self, project: StarterProjectMeta) -> Result<()> {
         let mut command = self.build(project);
 
         match command.spawn() {
