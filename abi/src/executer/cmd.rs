@@ -3,6 +3,7 @@ use super::ProjectExecuter;
 use crate::project::StarterProjectMeta;
 use std::process::Command;
 
+#[derive(Clone)]
 pub enum Cmd {
     Path(CmdPath),
 }
@@ -15,6 +16,7 @@ impl ProjectExecuter for Cmd {
     }
 }
 
+#[derive(Clone)]
 pub struct CmdPath;
 
 impl ProjectExecuter for CmdPath {

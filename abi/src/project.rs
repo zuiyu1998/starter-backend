@@ -10,6 +10,7 @@ pub struct StarterProjectListResponse {
     pub page: i32,
 }
 
+#[derive(Clone)]
 pub struct StarterProject {
     pub meta: StarterProjectMeta,
     pub excuter: Executer,
@@ -30,6 +31,7 @@ impl StarterProject {
 }
 
 //启动器项目
+#[derive(Clone)]
 pub struct StarterProjectMeta {
     //
     pub uuid: Uuid,

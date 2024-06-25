@@ -7,7 +7,7 @@ use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct Database {
-    project: Arc<dyn ProjectRepo>,
+    pub project: Arc<dyn ProjectRepo>,
 }
 
 impl Database {

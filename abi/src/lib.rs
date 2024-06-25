@@ -6,7 +6,9 @@ pub mod utils;
 pub use error::*;
 
 pub use async_trait;
+pub use dashmap;
 pub use thiserror;
+pub use uuid;
 
 pub mod prelude {
     pub use crate::executer::*;

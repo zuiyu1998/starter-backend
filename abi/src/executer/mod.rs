@@ -5,6 +5,8 @@ use std::process::Command;
 
 pub use cmd::{Cmd, CmdPath};
 
+#[derive(Clone)]
+
 pub enum ExecuterKind {
     Cmd(Cmd),
 }
@@ -17,6 +19,7 @@ impl ProjectExecuter for ExecuterKind {
     }
 }
 
+#[derive(Clone)]
 pub enum Executer {
     Kind(ExecuterKind),
     Custom,
