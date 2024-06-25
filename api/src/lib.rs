@@ -1,9 +1,10 @@
-mod error;
+pub mod error;
 
-use error::*;
+pub use abi;
 
 use abi::{dashmap::DashMap, prelude::*, uuid::Uuid};
 use db::database::Database;
+use error::*;
 
 #[derive(Clone)]
 pub struct State {

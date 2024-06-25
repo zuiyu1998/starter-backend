@@ -1,9 +1,9 @@
 use super::ProjectExecuter;
-
 use crate::project::StarterProjectMeta;
+use serde::{Deserialize, Serialize};
 use std::process::Command;
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize, Serialize)]
 pub enum Cmd {
     Path(CmdPath),
 }
@@ -16,7 +16,7 @@ impl ProjectExecuter for Cmd {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize, Serialize)]
 pub struct CmdPath;
 
 impl ProjectExecuter for CmdPath {

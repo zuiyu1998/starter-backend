@@ -1,11 +1,12 @@
 mod cmd;
 
 use crate::{project::StarterProjectMeta, Result};
+use serde::{Deserialize, Serialize};
 use std::process::Command;
 
 pub use cmd::{Cmd, CmdPath};
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize, Serialize)]
 
 pub enum ExecuterKind {
     Cmd(Cmd),
@@ -19,7 +20,8 @@ impl ProjectExecuter for ExecuterKind {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize, Serialize)]
+
 pub enum Executer {
     Kind(ExecuterKind),
     Custom,

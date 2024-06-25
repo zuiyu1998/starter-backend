@@ -1,6 +1,8 @@
 use chrono::NaiveDateTime;
 use uuid::Uuid;
 
+use serde::{Deserialize, Serialize};
+
 use crate::{executer::Executer, prelude::ProjectExecuter, utils::get_now, Result};
 
 pub struct StarterProjectListResponse {
@@ -10,7 +12,7 @@ pub struct StarterProjectListResponse {
     pub page: i32,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProject {
     pub meta: StarterProjectMeta,
     pub excuter: Executer,
@@ -31,7 +33,7 @@ impl StarterProject {
 }
 
 //启动器项目
-#[derive(Clone)]
+#[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProjectMeta {
     //
     pub uuid: Uuid,
