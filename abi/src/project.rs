@@ -1,5 +1,3 @@
-use std::path::{Path, PathBuf};
-
 use chrono::NaiveDateTime;
 use uuid::Uuid;
 
@@ -10,21 +8,21 @@ pub struct StarterProject {
     //
     pub uuid: Uuid,
 
-    pub path: PathBuf,
-    pub exe_path: PathBuf,
+    pub path: String,
+    pub exe_path: String,
     pub create_at: NaiveDateTime,
     pub update_at: NaiveDateTime,
     pub icon: String,
 }
 
 impl StarterProject {
-    pub fn new(path: &Path, exe_path: &Path, icon: &str) -> Self {
+    pub fn new(exe_path: &str, path: &str, icon: &str) -> Self {
         let now: NaiveDateTime = get_now();
 
         Self {
             uuid: Uuid::new_v4(),
-            path: path.to_path_buf(),
-            exe_path: exe_path.to_path_buf(),
+            path: path.to_string(),
+            exe_path: exe_path.to_string(),
             create_at: now.clone(),
             update_at: now,
             icon: icon.to_string(),

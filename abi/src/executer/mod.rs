@@ -1,11 +1,35 @@
+mod cmd;
+
 use crate::{project::StarterProject, Result};
 use std::process::Command;
 
-pub struct Executer(Box<dyn ProjectExecuter>);
+use cmd::Cmd;
+
+pub enum ExecuterKind {
+    Cmd(Cmd),
+}
+
+impl ProjectExecuter for ExecuterKind {
+    fn build(&self, project: StarterProject) -> Command {
+        match self {
+            ExecuterKind::Cmd(cmd) => cmd.build(project),
+        }
+    }
+}
+
+pub enum Executer {
+    Kind(ExecuterKind),
+    Custom,
+}
 
 impl ProjectExecuter for Executer {
     fn build(&self, project: StarterProject) -> Command {
-        self.0.build(project)
+        match self {
+            Executer::Kind(kind) => kind.build(project),
+            Executer::Custom => {
+                todo!()
+            }
+        }
     }
 }
 
