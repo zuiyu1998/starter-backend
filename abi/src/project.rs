@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{executer::Executer, prelude::ProjectExecuter, utils::get_now, Result};
 
+#[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProjectListResponse {
     pub count: i32,
     pub data: Vec<StarterProject>,
