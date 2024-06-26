@@ -1,7 +1,7 @@
 use abi::{
     chrono::NaiveDateTime,
-    executer::{Cmd, CmdPath, Executer, ExecuterKind},
-    sea_orm::{self, entity::prelude::*},
+    project::{into_executer, StarterProject, StarterProjectCreate, StarterProjectMeta},
+    sea_orm::{self, entity::prelude::*, IntoActiveModel, Set},
 };
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
@@ -25,21 +25,47 @@ pub enum Relation {}
 
 impl ActiveModelBehavior for ActiveModel {}
 
-fn from_executer(executer: Executer) -> i32 {
-    match executer {
-        Executer::Custom => 1,
-        Executer::Kind(kind) => match kind {
-            ExecuterKind::Cmd(cmd) => match cmd {
-                Cmd::Path(_) => 2,
-            },
-        },
+impl IntoActiveModel<ActiveModel> for StarterProjectCreate {
+    fn into_active_model(self) -> ActiveModel {
+        let meta = StarterProjectMeta::new(
+            &self.exe_path,
+            &self.path,
+            &self.icon,
+            &self.name,
+            &self.description,
+        );
+
+        let mut active: ActiveModel = Default::default();
+
+        active.name = Set(meta.name);
+        active.description = Set(meta.description);
+        active.uuid = Set(meta.uuid);
+        active.create_at = Set(meta.create_at);
+        active.update_at = Set(meta.update_at);
+        active.path = Set(meta.path);
+        active.exe_path = Set(meta.exe_path);
+
+        active.executer = Set(self.executer);
+
+        active
     }
 }
 
-fn into_executer(num: i32) -> Option<Executer> {
-    match num {
-        1 => Some(Executer::Custom),
-        2 => Some(Executer::from(CmdPath)),
-        _ => None,
+impl From<Model> for StarterProject {
+    fn from(value: Model) -> Self {
+        let meta = StarterProjectMeta {
+            uuid: value.uuid,
+            path: value.path,
+            exe_path: value.exe_path,
+            create_at: value.create_at,
+            update_at: value.update_at,
+            icon: value.icon,
+            name: value.name,
+            description: value.description,
+        };
+
+        let executer = into_executer(value.executer);
+
+        StarterProject { meta, executer }
     }
 }
