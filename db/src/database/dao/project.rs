@@ -6,6 +6,8 @@ use abi::{
     sea_orm::{prelude::*, DatabaseConnection, IntoActiveModel},
 };
 
+use entity::*;
+
 pub struct DaoPoject {
     conn: DatabaseConnection,
 }
@@ -18,15 +20,35 @@ impl DaoPoject {
 
 #[async_trait]
 impl ProjectRepo for DaoPoject {
-    async fn get_project_list(&self) -> Result<StarterProjectListResponse> {
+    async fn get_project_list(
+        &self,
+        params: GetProjectListParams,
+    ) -> Result<StarterProjectListResponse> {
+        let sql = ProjectEntity::find();
+
+        let count = sql.clone().count(&self.conn).await?;
+
+        let paginate = sql.paginate(&self.conn, params.page_size as u64);
+
+        let data = paginate
+            .fetch_page(params.page_size as u64)
+            .await?
+            .into_iter()
+            .map(|model| StarterProject::from(model))
+            .collect::<Vec<StarterProject>>();
+
+        let mut has_next = true;
+
+        if data.len() < params.page as usize {
+            has_next = false;
+        }
+
         Ok(StarterProjectListResponse {
-            count: 1,
-            data: vec![StarterProject::new(
-                StarterProjectMeta::new("code", ".", "", "", ""),
-                Executer::from(CmdPath),
-            )],
-            page: 1,
-            page_size: 50,
+            count: count as i32,
+            data,
+            page: params.page,
+            page_size: params.page_size,
+            has_next,
         })
     }
 

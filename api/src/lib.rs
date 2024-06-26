@@ -13,8 +13,11 @@ pub struct State {
 }
 
 impl State {
-    pub async fn get_project_list(&self) -> Result<StarterProjectListResponse> {
-        let res = self.database.project.get_project_list().await?;
+    pub async fn get_project_list(
+        &self,
+        params: GetProjectListParams,
+    ) -> Result<StarterProjectListResponse> {
+        let res = self.database.project.get_project_list(params).await?;
 
         for project in res.data.iter() {
             if !self.project_map.contains_key(&project.meta.uuid) {

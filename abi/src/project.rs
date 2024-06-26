@@ -35,6 +35,7 @@ pub struct StarterProjectListResponse {
     pub data: Vec<StarterProject>,
     pub page_size: i32,
     pub page: i32,
+    pub has_next: bool,
 }
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -65,6 +66,12 @@ impl StarterProject {
     pub fn new(meta: StarterProjectMeta, executer: Executer) -> Self {
         Self { meta, executer }
     }
+}
+
+#[derive(Clone, Deserialize, Serialize)]
+pub struct GetProjectListParams {
+    pub page_size: i32,
+    pub page: i32,
 }
 
 //启动器项目
