@@ -21,7 +21,7 @@ impl Db {
         Migrator::up(&conn, None).await?;
 
         Ok(Db {
-            project: Arc::new(DaoPoject),
+            project: Arc::new(DaoPoject::new(conn.clone())),
         })
     }
 }

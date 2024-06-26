@@ -1,8 +1,16 @@
 use crate::database::project::ProjectRepo;
 use crate::Result;
-use abi::{async_trait::async_trait, prelude::*};
+use abi::{async_trait::async_trait, prelude::*, sea_orm::DatabaseConnection};
 
-pub struct DaoPoject;
+pub struct DaoPoject {
+    conn: DatabaseConnection,
+}
+
+impl DaoPoject {
+    pub fn new(conn: DatabaseConnection) -> Self {
+        Self { conn }
+    }
+}
 
 #[async_trait]
 impl ProjectRepo for DaoPoject {
