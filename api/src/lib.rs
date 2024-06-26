@@ -2,13 +2,13 @@ pub mod error;
 
 pub use abi;
 
-use abi::{dashmap::DashMap, prelude::*, uuid::Uuid};
-use db::database::Database;
+use abi::{config::Config, dashmap::DashMap, prelude::*, uuid::Uuid};
+use db::database::Db;
 use error::*;
 
 #[derive(Clone)]
 pub struct State {
-    pub database: Database,
+    pub database: Db,
     pub project_map: DashMap<Uuid, StarterProject>,
 }
 
@@ -36,10 +36,12 @@ impl State {
         Ok(())
     }
 
-    pub fn new() -> Self {
-        Self {
-            database: Database::new(),
+    pub async fn from_config(config: &Config) -> Result<Self> {
+        let database = Db::from_config(config).await?;
+
+        Ok(Self {
+            database,
             project_map: Default::default(),
-        }
+        })
     }
 }

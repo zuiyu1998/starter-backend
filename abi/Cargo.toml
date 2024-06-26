@@ -12,3 +12,8 @@ async-trait = { version = "0.1" }
 dashmap = { version = "6.0" }
 
 serde = { version = "1.0", features = ["derive"] }
+
+sea-orm = { version = "0.12", features = [
+    "runtime-tokio-native-tls",
+    "sqlx-sqlite",
+] }

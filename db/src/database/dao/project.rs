@@ -10,7 +10,7 @@ impl ProjectRepo for DaoPoject {
         Ok(StarterProjectListResponse {
             count: 1,
             data: vec![StarterProject::new(
-                StarterProjectMeta::new("code", ".", ""),
+                StarterProjectMeta::new("code", ".", "", "", ""),
                 Executer::from(CmdPath),
             )],
             page: 1,

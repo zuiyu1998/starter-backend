@@ -16,20 +16,20 @@ pub struct StarterProjectListResponse {
 #[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProject {
     pub meta: StarterProjectMeta,
-    pub excuter: Executer,
+    pub executer: Executer,
 }
 
 impl StarterProject {
     pub fn executer(self) -> Result<()> {
-        self.excuter.execute(self.meta)?;
+        self.executer.execute(self.meta)?;
 
         Ok(())
     }
 }
 
 impl StarterProject {
-    pub fn new(meta: StarterProjectMeta, excuter: Executer) -> Self {
-        Self { meta, excuter }
+    pub fn new(meta: StarterProjectMeta, executer: Executer) -> Self {
+        Self { meta, executer }
     }
 }
 
@@ -44,10 +44,12 @@ pub struct StarterProjectMeta {
     pub create_at: NaiveDateTime,
     pub update_at: NaiveDateTime,
     pub icon: String,
+    pub name: String,
+    pub description: String,
 }
 
 impl StarterProjectMeta {
-    pub fn new(exe_path: &str, path: &str, icon: &str) -> Self {
+    pub fn new(exe_path: &str, path: &str, icon: &str, name: &str, description: &str) -> Self {
         let now: NaiveDateTime = get_now();
 
         Self {
@@ -57,6 +59,8 @@ impl StarterProjectMeta {
             create_at: now.clone(),
             update_at: now,
             icon: icon.to_string(),
+            name: name.to_string(),
+            description: description.to_string(),
         }
     }
 }

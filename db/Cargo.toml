@@ -5,3 +5,5 @@ edition = "2021"
 
 [dependencies]
 abi = { path = "../abi" }
+entity = { path = "../entity" }
+migration = { path = "../migration" }
