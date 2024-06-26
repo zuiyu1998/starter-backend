@@ -26,6 +26,15 @@ impl State {
         Ok(res)
     }
 
+    pub async fn create_project(&self, create: StarterProjectCreate) -> Result<()> {
+        let project = self.database.project.create_project(create).await?;
+
+        self.project_map
+            .insert(project.meta.uuid.clone(), project.clone());
+
+        Ok(())
+    }
+
     pub async fn excute_project(&self, uuid: &Uuid) -> Result<()> {
         if let Some(project) = self.project_map.get(uuid) {
             let project = project.clone();

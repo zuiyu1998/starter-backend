@@ -37,6 +37,7 @@ pub struct StarterProjectListResponse {
     pub page: i32,
 }
 
+#[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProjectCreate {
     pub path: String,
     pub exe_path: String,
