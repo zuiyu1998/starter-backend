@@ -11,6 +11,7 @@ pub use chrono;
 pub use dashmap;
 pub use sea_orm;
 pub use thiserror;
+pub use tokio;
 pub use uuid;
 
 pub mod prelude {
