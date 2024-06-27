@@ -40,6 +40,18 @@ impl MigrationTrait for Migration {
                             .date_time()
                             .not_null(),
                     )
+                    .col(
+                        ColumnDef::new(ProjectColumn::IsDelete)
+                            .boolean()
+                            .default(false)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(ProjectColumn::IsEnable)
+                            .boolean()
+                            .default(true)
+                            .not_null(),
+                    )
                     .to_owned(),
             )
             .await

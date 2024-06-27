@@ -18,6 +18,8 @@ pub struct Model {
     pub name: String,
     pub description: String,
     pub executer: i32,
+    pub is_delete: bool,
+    pub is_enable: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
