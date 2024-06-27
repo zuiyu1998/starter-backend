@@ -5,7 +5,7 @@ use abi::{
 };
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
-#[sea_orm(table_name = "posts")]
+#[sea_orm(table_name = "project")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
@@ -44,6 +44,7 @@ impl IntoActiveModel<ActiveModel> for StarterProjectCreate {
         active.update_at = Set(meta.update_at);
         active.path = Set(meta.path);
         active.exe_path = Set(meta.exe_path);
+        active.icon = Set(meta.icon);
 
         active.executer = Set(self.executer);
 
