@@ -31,7 +31,7 @@ impl ProjectRepo for DaoPoject {
         let paginate = sql.paginate(&self.conn, params.page_size as u64);
 
         let data = paginate
-            .fetch_page(params.page_size as u64)
+            .fetch_page(params.page as u64)
             .await?
             .into_iter()
             .map(|model| StarterProject::from(model))
