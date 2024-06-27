@@ -19,7 +19,12 @@ impl MigrationTrait for Migration {
                             .auto_increment()
                             .primary_key(),
                     )
-                    .col(ColumnDef::new(ProjectColumn::Uuid).uuid().not_null())
+                    .col(
+                        ColumnDef::new(ProjectColumn::Uuid)
+                            .uuid()
+                            .unique_key()
+                            .not_null(),
+                    )
                     .col(ColumnDef::new(ProjectColumn::Path).string().not_null())
                     .col(ColumnDef::new(ProjectColumn::ExePath).string().not_null())
                     .col(ColumnDef::new(ProjectColumn::Icon).string().not_null())

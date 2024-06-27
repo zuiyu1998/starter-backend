@@ -3,7 +3,7 @@ use crate::Result;
 use abi::{
     async_trait::async_trait,
     prelude::*,
-    sea_orm::{prelude::*, DatabaseConnection, IntoActiveModel},
+    sea_orm::{prelude::*, DatabaseConnection, IntoActiveModel, Set},
 };
 
 use entity::*;
@@ -54,6 +54,18 @@ impl ProjectRepo for DaoPoject {
 
     async fn create_project(&self, create: StarterProjectCreate) -> Result<StarterProject> {
         let active = create.into_active_model();
+
+        let model = active.insert(&self.conn).await?;
+
+        Ok(StarterProject::from(model))
+    }
+
+    async fn delete(&self, uuid: Uuid) -> Result<StarterProject> {
+        let mut active: ProjectActiveModel = Default::default();
+
+        active.uuid = Set(uuid);
+        active.is_delete = Set(true);
+        active.is_enable = Set(false);
 
         let model = active.insert(&self.conn).await?;
 
