@@ -41,8 +41,7 @@ impl State {
     pub async fn delete_project(&self, uuid: Uuid) -> Result<()> {
         let project = self.database.project.delete(uuid).await?;
 
-        self.project_map
-            .insert(project.meta.uuid.clone(), project.clone());
+        self.project_map.remove(&uuid);
 
         Ok(())
     }
