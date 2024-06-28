@@ -67,7 +67,7 @@ impl ProjectRepo for DaoPoject {
         active.is_delete = Set(true);
         active.is_enable = Set(false);
 
-        let model = active.insert(&self.conn).await?;
+        let model = active.update(&self.conn).await?;
 
         Ok(StarterProject::from(model))
     }
