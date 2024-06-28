@@ -24,7 +24,7 @@ impl ProjectRepo for DaoPoject {
         &self,
         params: GetProjectListParams,
     ) -> Result<StarterProjectListResponse> {
-        let sql = ProjectEntity::find();
+        let sql = ProjectEntity::find().filter(ProjectColumn::IsEnable.eq(true));
 
         let count = sql.clone().count(&self.conn).await?;
 
