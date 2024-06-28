@@ -38,6 +38,15 @@ impl State {
         Ok(())
     }
 
+    pub async fn delete_project(&self, uuid: Uuid) -> Result<()> {
+        let project = self.database.project.delete(uuid).await?;
+
+        self.project_map
+            .insert(project.meta.uuid.clone(), project.clone());
+
+        Ok(())
+    }
+
     pub async fn excute_project(&self, uuid: &Uuid) -> Result<()> {
         if let Some(project) = self.project_map.get(uuid) {
             let project = project.clone();
