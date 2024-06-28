@@ -60,10 +60,10 @@ impl ProjectRepo for DaoPoject {
         Ok(StarterProject::from(model))
     }
 
-    async fn delete(&self, uuid: Uuid) -> Result<StarterProject> {
+    async fn delete(&self, id: i32) -> Result<StarterProject> {
         let mut active: ProjectActiveModel = Default::default();
 
-        active.uuid = Set(uuid);
+        active.id = Set(id);
         active.is_delete = Set(true);
         active.is_enable = Set(false);
 

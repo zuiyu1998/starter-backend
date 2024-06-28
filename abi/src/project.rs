@@ -52,6 +52,7 @@ pub struct StarterProjectCreate {
 pub struct StarterProject {
     pub meta: StarterProjectMeta,
     pub executer: Executer,
+    pub id: i32,
 }
 
 impl StarterProject {
@@ -63,8 +64,8 @@ impl StarterProject {
 }
 
 impl StarterProject {
-    pub fn new(meta: StarterProjectMeta, executer: Executer) -> Self {
-        Self { meta, executer }
+    pub fn new(meta: StarterProjectMeta, executer: Executer, id: i32) -> Self {
+        Self { meta, executer, id }
     }
 }
 

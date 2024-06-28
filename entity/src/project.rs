@@ -69,6 +69,10 @@ impl From<Model> for StarterProject {
 
         let executer = into_executer(value.executer);
 
-        StarterProject { meta, executer }
+        StarterProject {
+            meta,
+            executer,
+            id: value.id,
+        }
     }
 }

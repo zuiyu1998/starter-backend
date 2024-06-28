@@ -39,9 +39,9 @@ impl State {
     }
 
     pub async fn delete_project(&self, uuid: Uuid) -> Result<()> {
-        self.database.project.delete(uuid).await?;
-
-        self.project_map.remove(&uuid);
+        if let Some((_, project)) = self.project_map.remove(&uuid) {
+            self.database.project.delete(project.id).await?;
+        }
 
         Ok(())
     }
