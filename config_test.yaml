@@ -1,2 +1,3 @@
 system:
   sqlite_db_name: 'sqlte_test.db'
+  index_path_name: 'index_test'

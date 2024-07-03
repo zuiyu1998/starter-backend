@@ -1,4 +1,4 @@
 [workspace]
-members = ["abi", "api", "db", "entity", "migration", "entity"]
+members = ["abi", "api", "db", "entity", "migration", "entity", "doc_index"]
 
 resolver = "2"
