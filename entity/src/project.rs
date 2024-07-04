@@ -49,6 +49,7 @@ impl IntoActiveModel<ActiveModel> for StarterProjectCreate {
         active.path = Set(meta.path);
         active.exe_path = Set(meta.exe_path);
         active.icon = Set(meta.icon);
+        active.tags = Set(meta.tags);
 
         active.executer = Set(self.executer);
 
