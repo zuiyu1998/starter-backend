@@ -71,4 +71,23 @@ impl ProjectRepo for DaoPoject {
 
         Ok(StarterProject::from(model))
     }
+
+    async fn get_list_by_ids(&self, ids: Vec<i32>) -> Result<Vec<StarterProject>> {
+        let sql = ProjectEntity::find().filter(ProjectColumn::Id.is_in(ids));
+
+        let data = sql
+            .all(&self.conn)
+            .await?
+            .into_iter()
+            .map(|model| StarterProject::from(model))
+            .collect();
+
+        Ok(data)
+    }
+
+    async fn get_count(&self) -> Result<i32> {
+        let count = ProjectEntity::find().count(&self.conn).await?;
+
+        Ok(count as i32)
+    }
 }

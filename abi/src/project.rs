@@ -74,6 +74,7 @@ impl StarterProject {
 pub struct GetProjectListParams {
     pub page_size: i32,
     pub page: i32,
+    pub tags: Option<String>,
 }
 
 //启动器项目

@@ -15,18 +15,40 @@ pub struct State {
 }
 
 impl State {
+    async fn get_ids(&self, tag: &str, page_size: i32, page: i32) -> Result<Vec<i32>> {
+        let guard = self.doc_index.tag.lock().await;
+
+        let ids = guard.get_indexs(&tag, page_size, page)?;
+        Ok(ids)
+    }
+
     pub async fn get_project_list(
         &self,
         params: GetProjectListParams,
     ) -> Result<StarterProjectListResponse> {
-        let res = self.database.project.get_project_list(params).await?;
+        let tags = params.tags.unwrap_or("*".to_string());
 
-        for project in res.data.iter() {
+        let ids = self.get_ids(&tags, params.page_size, params.page).await?;
+
+        let count = self.database.project.get_count().await?;
+        let projects = self.database.project.get_list_by_ids(ids).await?;
+
+        for project in projects.iter() {
             if !self.project_map.contains_key(&project.meta.uuid) {
                 self.project_map
                     .insert(project.meta.uuid.clone(), project.clone());
             }
         }
+
+        let has_next = projects.len() >= params.page_size as usize;
+
+        let res = StarterProjectListResponse {
+            data: projects,
+            page: params.page,
+            page_size: params.page_size,
+            has_next,
+            count,
+        };
 
         Ok(res)
     }
