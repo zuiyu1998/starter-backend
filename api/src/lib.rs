@@ -4,12 +4,14 @@ pub use abi;
 
 use abi::{config::Config, dashmap::DashMap, prelude::*, uuid::Uuid};
 use db::database::Db;
+use doc_index::doc_index::DocIndex;
 use error::*;
 
 #[derive(Clone)]
 pub struct State {
     pub database: Db,
     pub project_map: DashMap<Uuid, StarterProject>,
+    pub doc_index: DocIndex,
 }
 
 impl State {
@@ -31,6 +33,12 @@ impl State {
 
     pub async fn create_project(&self, create: StarterProjectCreate) -> Result<()> {
         let project = self.database.project.create_project(create).await?;
+
+        {
+            let mut guard = self.doc_index.tag.lock().await;
+
+            guard.store_index(&project.meta.tags, project.id)?;
+        }
 
         self.project_map
             .insert(project.meta.uuid.clone(), project.clone());
@@ -58,10 +66,12 @@ impl State {
 
     pub async fn from_config(config: &Config) -> Result<Self> {
         let database = Db::from_config(config).await?;
+        let doc_index = DocIndex::from_config(config).await?;
 
         Ok(Self {
             database,
             project_map: Default::default(),
+            doc_index,
         })
     }
 }

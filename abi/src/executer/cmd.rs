@@ -38,7 +38,7 @@ mod test {
         use crate::executer::ProjectExecuter;
         use crate::project::StarterProjectMeta;
 
-        let project = StarterProjectMeta::new("code", ".", "", "", "");
+        let project = StarterProjectMeta::new("code", ".", "", "", "", "test");
 
         let executer = CmdPath;
 

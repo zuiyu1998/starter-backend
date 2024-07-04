@@ -46,7 +46,8 @@ impl TantivyTag {
 }
 
 impl TagIndexRepo for TantivyTag {
-    fn store_index(&mut self, tag: &str, id: i64) -> Result<()> {
+    fn store_index(&mut self, tag: &str, id: i32) -> Result<()> {
+        let id = id as i64;
         let tag_field = self.schema.get_field("tag")?;
         let id_field = self.schema.get_field("id")?;
 
@@ -63,7 +64,7 @@ impl TagIndexRepo for TantivyTag {
         Ok(())
     }
 
-    fn get_indexs(&self, tag: &str) -> Result<Vec<i64>> {
+    fn get_indexs(&self, tag: &str, page_size: i32, page: i32) -> Result<Vec<i32>> {
         let tag_field = self.schema.get_field("tag")?;
         let id_field = self.schema.get_field("id")?;
 
@@ -79,21 +80,22 @@ impl TagIndexRepo for TantivyTag {
 
         let query = query_parser.parse_query(tag)?;
 
-        let collecter = TopDocs::with_limit(10).and_offset(0);
+        let offest = page_size * page;
+        let collecter = TopDocs::with_limit(page_size as usize).and_offset(offest as usize);
 
         let top_docs: Vec<(Score, DocAddress)> = searcher.search(&query, &collecter)?;
 
-        let mut ids: HashSet<i64> = HashSet::default();
+        let mut ids: HashSet<i32> = HashSet::default();
 
         for (_score, address) in top_docs.into_iter() {
             let doc: HashMap<Field, OwnedValue> = searcher.doc(address)?;
 
             if let Some(value) = doc.get(&id_field) {
-                ids.insert(value.as_i64().unwrap());
+                ids.insert(value.as_i64().unwrap() as i32);
             }
         }
 
-        Ok(ids.into_iter().collect::<Vec<i64>>())
+        Ok(ids.into_iter().collect::<Vec<i32>>())
     }
 }
 
@@ -113,7 +115,7 @@ mod test {
         tag_index.store_index("test", 1).unwrap();
         tag_index.store_index("test1", 2).unwrap();
 
-        let ids = tag_index.get_indexs("test").unwrap();
+        let ids = tag_index.get_indexs("test", 10, 0).unwrap();
 
         assert_eq!(ids.len(), 1);
     }

@@ -28,6 +28,7 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(ProjectColumn::Path).string().not_null())
                     .col(ColumnDef::new(ProjectColumn::ExePath).string().not_null())
                     .col(ColumnDef::new(ProjectColumn::Icon).string().not_null())
+                    .col(ColumnDef::new(ProjectColumn::Tags).string().not_null())
                     .col(ColumnDef::new(ProjectColumn::Name).string().not_null())
                     .col(ColumnDef::new(ProjectColumn::Executer).integer().not_null())
                     .col(

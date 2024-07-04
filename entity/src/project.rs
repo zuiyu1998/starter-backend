@@ -16,6 +16,7 @@ pub struct Model {
     pub update_at: NaiveDateTime,
     pub icon: String,
     pub name: String,
+    pub tags: String,
     pub description: String,
     pub executer: i32,
     pub is_delete: bool,
@@ -35,6 +36,7 @@ impl IntoActiveModel<ActiveModel> for StarterProjectCreate {
             &self.icon,
             &self.name,
             &self.description,
+            &self.tags,
         );
 
         let mut active: ActiveModel = Default::default();
@@ -65,6 +67,7 @@ impl From<Model> for StarterProject {
             icon: value.icon,
             name: value.name,
             description: value.description,
+            tags: value.tags,
         };
 
         let executer = into_executer(value.executer);

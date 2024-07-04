@@ -46,6 +46,7 @@ pub struct StarterProjectCreate {
     pub name: String,
     pub description: String,
     pub executer: i32,
+    pub tags: String,
 }
 
 #[derive(Clone, Deserialize, Serialize)]
@@ -86,10 +87,18 @@ pub struct StarterProjectMeta {
     pub icon: String,
     pub name: String,
     pub description: String,
+    pub tags: String,
 }
 
 impl StarterProjectMeta {
-    pub fn new(exe_path: &str, path: &str, icon: &str, name: &str, description: &str) -> Self {
+    pub fn new(
+        exe_path: &str,
+        path: &str,
+        icon: &str,
+        name: &str,
+        description: &str,
+        tags: &str,
+    ) -> Self {
         let now: NaiveDateTime = get_now();
 
         Self {
@@ -101,6 +110,7 @@ impl StarterProjectMeta {
             icon: icon.to_string(),
             name: name.to_string(),
             description: description.to_string(),
+            tags: tags.to_string(),
         }
     }
 }
