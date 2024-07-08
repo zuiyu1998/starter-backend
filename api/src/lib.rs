@@ -22,6 +22,16 @@ impl State {
         Ok(ids)
     }
 
+    pub async fn get_executer_options() -> Result<Vec<ExecuterOption>> {
+        Ok(Executer::all()
+            .iter()
+            .map(|executer| ExecuterOption {
+                executer: executer.as_i32(),
+                name: format!("{}", executer),
+            })
+            .collect())
+    }
+
     pub async fn get_project_list(
         &self,
         params: GetProjectListParams,

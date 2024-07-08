@@ -15,6 +15,12 @@ pub struct StarterProjectListResponse {
 }
 
 #[derive(Clone, Deserialize, Serialize)]
+pub struct ExecuterOption {
+    pub executer: i32,
+    pub name: String,
+}
+
+#[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProjectCreate {
     pub path: String,
     pub exe_path: String,

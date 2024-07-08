@@ -53,6 +53,10 @@ impl Executer {
             },
         }
     }
+
+    pub fn all() -> Vec<Executer> {
+        vec![Executer::from(1), Executer::from(2)]
+    }
 }
 
 impl From<i32> for Executer {
