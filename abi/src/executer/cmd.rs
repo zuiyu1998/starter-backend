@@ -5,14 +5,30 @@ use std::process::Command;
 
 #[derive(Clone, Deserialize, Serialize)]
 pub enum Cmd {
-    Path(CmdEnv),
+    Env(CmdEnv),
+    Binary(Binary),
 }
 
 impl ProjectExecuter for Cmd {
     fn build(&self, project: StarterProjectMeta) -> Command {
         match self {
-            Cmd::Path(path) => path.build(project),
+            Cmd::Env(env) => env.build(project),
+            Cmd::Binary(path) => path.build(project),
         }
+    }
+}
+
+#[derive(Clone, Deserialize, Serialize)]
+pub struct Binary;
+
+impl ProjectExecuter for Binary {
+    fn build(&self, project: StarterProjectMeta) -> Command {
+        let args = format!("{} {}", project.exe_path, project.path);
+        let mut command = Command::new("cmd");
+
+        command.args(["/C", &args]);
+
+        command
     }
 }
 
