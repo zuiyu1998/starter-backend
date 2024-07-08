@@ -5,7 +5,7 @@ use std::process::Command;
 
 #[derive(Clone, Deserialize, Serialize)]
 pub enum Cmd {
-    Path(CmdPath),
+    Path(CmdEnv),
 }
 
 impl ProjectExecuter for Cmd {
@@ -17,9 +17,9 @@ impl ProjectExecuter for Cmd {
 }
 
 #[derive(Clone, Deserialize, Serialize)]
-pub struct CmdPath;
+pub struct CmdEnv;
 
-impl ProjectExecuter for CmdPath {
+impl ProjectExecuter for CmdEnv {
     fn build(&self, project: StarterProjectMeta) -> Command {
         let args = format!("{} {}", project.exe_path, project.path);
         let mut command = Command::new("cmd");
@@ -34,13 +34,13 @@ mod test {
 
     #[test]
     fn test_cmd_path() {
-        use super::CmdPath;
+        use super::CmdEnv;
         use crate::executer::ProjectExecuter;
         use crate::project::StarterProjectMeta;
 
         let project = StarterProjectMeta::new("code", ".", "", "", "", "test");
 
-        let executer = CmdPath;
+        let executer = CmdEnv;
 
         let res = executer.execute(project).ok().is_some();
 

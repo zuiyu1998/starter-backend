@@ -2,9 +2,9 @@ mod cmd;
 
 use crate::{project::StarterProjectMeta, Result};
 use serde::{Deserialize, Serialize};
-use std::process::Command;
+use std::{fmt::Display, process::Command};
 
-pub use cmd::{Cmd, CmdPath};
+pub use cmd::{Cmd, CmdEnv};
 
 #[derive(Clone, Deserialize, Serialize)]
 
@@ -20,6 +20,19 @@ impl ProjectExecuter for ExecuterKind {
     }
 }
 
+impl Display for Executer {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Executer::Custom => f.write_str("custom"),
+            Executer::Kind(kind) => match kind {
+                ExecuterKind::Cmd(cmd) => match cmd {
+                    Cmd::Path(_) => f.write_str("cmd env"),
+                },
+            },
+        }
+    }
+}
+
 #[derive(Clone, Deserialize, Serialize)]
 
 pub enum Executer {
@@ -27,8 +40,8 @@ pub enum Executer {
     Custom,
 }
 
-impl From<CmdPath> for Executer {
-    fn from(value: CmdPath) -> Self {
+impl From<CmdEnv> for Executer {
+    fn from(value: CmdEnv) -> Self {
         Executer::Kind(ExecuterKind::Cmd(Cmd::Path(value)))
     }
 }
@@ -40,6 +53,29 @@ impl ProjectExecuter for Executer {
             Executer::Custom => {
                 todo!()
             }
+        }
+    }
+}
+
+impl Executer {
+    pub fn as_i32(&self) -> i32 {
+        match self {
+            Executer::Custom => 1,
+            Executer::Kind(kind) => match kind {
+                ExecuterKind::Cmd(cmd) => match cmd {
+                    Cmd::Path(_) => 2,
+                },
+            },
+        }
+    }
+}
+
+impl From<i32> for Executer {
+    fn from(value: i32) -> Self {
+        match value {
+            1 => Executer::Custom,
+            2 => Executer::from(CmdEnv),
+            _ => Executer::Custom,
         }
     }
 }

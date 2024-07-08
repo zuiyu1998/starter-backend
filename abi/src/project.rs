@@ -3,31 +3,7 @@ use uuid::Uuid;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{
-    executer::{Cmd, CmdPath, Executer, ExecuterKind},
-    prelude::ProjectExecuter,
-    utils::get_now,
-    Result,
-};
-
-pub fn from_executer(executer: Executer) -> i32 {
-    match executer {
-        Executer::Custom => 1,
-        Executer::Kind(kind) => match kind {
-            ExecuterKind::Cmd(cmd) => match cmd {
-                Cmd::Path(_) => 2,
-            },
-        },
-    }
-}
-
-pub fn into_executer(num: i32) -> Executer {
-    match num {
-        1 => Executer::Custom,
-        2 => Executer::from(CmdPath),
-        _ => Executer::Custom,
-    }
-}
+use crate::{executer::Executer, prelude::ProjectExecuter, utils::get_now, Result};
 
 #[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProjectListResponse {
@@ -50,15 +26,29 @@ pub struct StarterProjectCreate {
 }
 
 #[derive(Clone, Deserialize, Serialize)]
+pub struct StarterProjectUpdate {
+    pub id: i32,
+    pub path: Option<String>,
+    pub exe_path: Option<String>,
+    pub icon: Option<String>,
+    pub name: Option<String>,
+    pub description: Option<String>,
+    pub executer: Option<i32>,
+    pub tags: Option<String>,
+}
+
+#[derive(Clone, Deserialize, Serialize)]
 pub struct StarterProject {
     pub meta: StarterProjectMeta,
-    pub executer: Executer,
+    pub executer: i32,
     pub id: i32,
 }
 
 impl StarterProject {
     pub fn executer(self) -> Result<()> {
-        self.executer.execute(self.meta)?;
+        let executer = Executer::from(self.executer);
+
+        executer.execute(self.meta)?;
 
         Ok(())
     }
@@ -66,7 +56,11 @@ impl StarterProject {
 
 impl StarterProject {
     pub fn new(meta: StarterProjectMeta, executer: Executer, id: i32) -> Self {
-        Self { meta, executer, id }
+        Self {
+            meta,
+            executer: executer.as_i32(),
+            id,
+        }
     }
 }
 

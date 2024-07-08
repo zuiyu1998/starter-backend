@@ -1,7 +1,8 @@
 use abi::{
     chrono::NaiveDateTime,
-    project::{into_executer, StarterProject, StarterProjectCreate, StarterProjectMeta},
+    project::{StarterProject, StarterProjectCreate, StarterProjectMeta, StarterProjectUpdate},
     sea_orm::{self, entity::prelude::*, IntoActiveModel, Set},
+    utils::get_now,
 };
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
@@ -71,12 +72,52 @@ impl From<Model> for StarterProject {
             tags: value.tags,
         };
 
-        let executer = into_executer(value.executer);
-
         StarterProject {
             meta,
-            executer,
+            executer: value.executer,
             id: value.id,
         }
+    }
+}
+
+impl IntoActiveModel<ActiveModel> for StarterProjectUpdate {
+    fn into_active_model(self) -> ActiveModel {
+        let mut active: ActiveModel = Default::default();
+
+        active.id = Set(self.id);
+
+        let now: NaiveDateTime = get_now();
+
+        if let Some(name) = self.name {
+            active.name = Set(name);
+        }
+
+        if let Some(description) = self.description {
+            active.description = Set(description);
+        }
+
+        active.update_at = Set(now);
+
+        if let Some(path) = self.path {
+            active.path = Set(path);
+        }
+
+        if let Some(exe_path) = self.exe_path {
+            active.exe_path = Set(exe_path);
+        }
+
+        if let Some(icon) = self.icon {
+            active.icon = Set(icon);
+        }
+
+        if let Some(tags) = self.tags {
+            active.tags = Set(tags);
+        }
+
+        if let Some(executer) = self.executer {
+            active.executer = Set(executer);
+        }
+
+        active
     }
 }

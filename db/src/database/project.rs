@@ -14,4 +14,6 @@ pub trait ProjectRepo: 'static + Send + Sync {
     async fn get_list_by_ids(&self, ids: Vec<i32>) -> Result<Vec<StarterProject>>;
 
     async fn get_count(&self) -> Result<i32>;
+
+    async fn update_project(&self, update: StarterProjectUpdate) -> Result<StarterProject>;
 }

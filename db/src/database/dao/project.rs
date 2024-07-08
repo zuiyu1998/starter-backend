@@ -90,4 +90,12 @@ impl ProjectRepo for DaoPoject {
 
         Ok(count as i32)
     }
+
+    async fn update_project(&self, update: StarterProjectUpdate) -> Result<StarterProject> {
+        let active = update.into_active_model();
+
+        let model = active.update(&self.conn).await?;
+
+        Ok(StarterProject::from(model))
+    }
 }
