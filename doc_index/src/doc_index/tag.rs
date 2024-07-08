@@ -10,9 +10,9 @@ use tantivy::{
     collector::TopDocs,
     directory::MmapDirectory,
     doc,
-    query::FuzzyTermQuery,
+    query::RegexQuery,
     schema::{Field, OwnedValue, Schema, Value, INDEXED, STORED, TEXT},
-    DocAddress, Index, IndexWriter, ReloadPolicy, Score, Term,
+    DocAddress, Index, IndexWriter, ReloadPolicy, Score,
 };
 
 pub struct TantivyTag {
@@ -76,8 +76,7 @@ impl TagIndexRepo for TantivyTag {
 
         let searcher = reader.searcher();
 
-        let term = Term::from_field_text(tag_field, tag);
-        let query = FuzzyTermQuery::new(term, 2, true);
+        let query = RegexQuery::from_pattern(&format!(".*{tag}.*"), tag_field)?;
 
         let offest = page_size * page;
         let collecter = TopDocs::with_limit(page_size as usize).and_offset(offest as usize);
@@ -114,7 +113,7 @@ mod test {
         tag_index.store_index("test", 1).unwrap();
         tag_index.store_index("test1", 2).unwrap();
 
-        let ids = tag_index.get_indexs("tes", 10, 0).unwrap();
+        let ids = tag_index.get_indexs("test", 10, 0).unwrap();
 
         assert_eq!(ids.len(), 2);
     }

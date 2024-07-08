@@ -56,11 +56,7 @@ impl State {
     pub async fn create_project(&self, create: StarterProjectCreate) -> Result<()> {
         let project = self.database.project.create_project(create).await?;
 
-        {
-            let mut guard = self.doc_index.tag.lock().await;
-
-            guard.store_index(&project.meta.tags, project.id)?;
-        }
+        self.store_tag_index(&project.meta.tags, project.id).await?;
 
         self.project_map
             .insert(project.meta.uuid.clone(), project.clone());
@@ -95,5 +91,13 @@ impl State {
             project_map: Default::default(),
             doc_index,
         })
+    }
+
+    pub async fn store_tag_index(&self, text: &str, id: i32) -> Result<()> {
+        let mut guard = self.doc_index.tag.lock().await;
+
+        guard.store_index(text, id)?;
+
+        Ok(())
     }
 }
