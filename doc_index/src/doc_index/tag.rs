@@ -12,7 +12,7 @@ use tantivy::{
     doc,
     query::RegexQuery,
     schema::{Field, OwnedValue, Schema, Value, INDEXED, STORED, TEXT},
-    DocAddress, Index, IndexWriter, ReloadPolicy, Score,
+    DocAddress, Index, IndexWriter, ReloadPolicy, Score, Term,
 };
 
 pub struct TantivyTag {
@@ -52,6 +52,10 @@ impl TagIndexRepo for TantivyTag {
         let id_field = self.schema.get_field("id")?;
 
         let mut index_writer: IndexWriter = self.index.writer(100_000_000)?;
+
+        //删除已有的doc
+        let tag_term = Term::from_field_text(tag_field, tag);
+        index_writer.delete_term(tag_term.clone());
 
         let doc = doc!(
             tag_field => tag,

@@ -15,6 +15,25 @@ pub struct State {
 }
 
 impl State {
+    pub async fn update_project(&self, update: StarterProjectUpdate) -> Result<()> {
+        let mut is_tags_update = false;
+
+        if update.tags.is_some() {
+            is_tags_update = true;
+        }
+
+        let project = self.database.project.update_project(update).await?;
+
+        if is_tags_update {
+            self.store_tag_index(&project.meta.tags, project.id).await?;
+        }
+
+        self.project_map
+            .insert(project.meta.uuid.clone(), project.clone());
+
+        Ok(())
+    }
+
     async fn get_ids(&self, tag: &str, page_size: i32, page: i32) -> Result<Vec<i32>> {
         let guard = self.doc_index.tag.lock().await;
 
