@@ -1,4 +1,12 @@
 [workspace]
-members = ["abi", "api", "db", "entity", "migration", "entity", "doc_index"]
+members = [
+    "./crates/abi",
+    "./crates/api",
+    "./crates/db",
+    "./crates/entity",
+    "./crates/migration",
+    "./crates/entity",
+    "./crates/doc_index",
+]
 
 resolver = "2"
