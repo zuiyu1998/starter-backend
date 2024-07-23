@@ -89,7 +89,7 @@ impl Storage for FileStorage {
 }
 
 #[async_trait]
-pub trait Storage {
+pub trait Storage: 'static + Send + Sync {
     async fn set_item(&self, key: &str, value: &str);
 
     async fn get_item(&self, key: &str) -> Option<String>;
