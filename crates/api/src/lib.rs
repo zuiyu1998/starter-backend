@@ -2,6 +2,8 @@ pub mod error;
 
 pub use abi;
 
+pub use storage;
+
 use abi::{config::Config, dashmap::DashMap, prelude::*, uuid::Uuid};
 use db::database::Db;
 use doc_index::doc_index::DocIndex;

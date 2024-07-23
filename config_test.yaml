@@ -1,3 +1,4 @@
 system:
   sqlite_db_name: 'sqlte_test.db'
   index_path_name: 'index_test'
+  config_path_name: 'config_test.json'

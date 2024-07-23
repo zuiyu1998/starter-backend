@@ -6,7 +6,7 @@ members = [
     "./crates/entity",
     "./crates/migration",
     "./crates/entity",
-    "./crates/doc_index",
+    "./crates/doc_index", "crates/storage",
 ]
 
 resolver = "2"

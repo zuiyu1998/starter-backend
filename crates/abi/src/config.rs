@@ -45,6 +45,7 @@ pub struct SystemConfig {
     pub config: PathBuf,
     pub sqlite_db_name: String,
     pub index_path_name: String,
+    pub config_path_name: String,
 }
 
 impl Default for SystemConfig {
@@ -53,6 +54,7 @@ impl Default for SystemConfig {
             config: get_config_dir(),
             sqlite_db_name: "sqlite.db".to_string(),
             index_path_name: "index".to_string(),
+            config_path_name: "config.json".to_string(),
         }
     }
 }
@@ -60,6 +62,17 @@ impl Default for SystemConfig {
 impl SystemConfig {
     pub fn get_db_dir(&self) -> PathBuf {
         self.config.join("db")
+    }
+
+    pub fn get_config_path(&self) -> PathBuf {
+        let mut path = self.get_config_dir();
+        path.push(&self.config_path_name);
+
+        path
+    }
+
+    pub fn get_config_dir(&self) -> PathBuf {
+        self.config.join("config")
     }
 
     pub fn get_index_path(&self) -> PathBuf {

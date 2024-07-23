@@ -5,6 +5,7 @@ use abi::{
 use db::Error as DbError;
 use doc_index::Error as DocIndexError;
 use std::io::Error as IoError;
+use storage::Error as StorageError;
 
 #[derive(Debug, Error)]
 pub enum Error {
@@ -16,6 +17,8 @@ pub enum Error {
     AbiError(#[from] AbiError),
     #[error("doc index error: {0}")]
     DocIndexError(#[from] DocIndexError),
+    #[error("doc index error: {0}")]
+    StorageError(#[from] StorageError),
 }
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;
