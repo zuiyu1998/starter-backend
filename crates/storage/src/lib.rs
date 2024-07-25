@@ -113,4 +113,8 @@ impl Persistent {
             storage: Arc::new(storage),
         })
     }
+
+    pub fn get_storage(&self) -> &Arc<dyn Storage> {
+        &self.storage
+    }
 }
